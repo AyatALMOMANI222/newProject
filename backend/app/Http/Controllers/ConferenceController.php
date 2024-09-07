@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Conference;
+use Carbon\Carbon;
 
 class ConferenceController extends Controller
 {
@@ -57,6 +59,65 @@ class ConferenceController extends Controller
             return response()->json(['message' => 'Failed to create conference.'], 500);
         }
     }
+    public function getAllConferences()
+    {
+        try {
+            $conferences = Conference::with(['images', 'committeeMembers', 'scientificTopics', 'prices'])->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $conferences
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve conferences.',
+            ], 500);
+        }
+    }
+
+
+
+    public function getConferenceByStatus($status)
+    {
+        try {
+            $currentDate = Carbon::now();
+
+            if ($status === 'past') {
+                $conferences = Conference::with(['images', 'committeeMembers', 'scientificTopics', 'prices'])
+                    ->where('end_date', '<', $currentDate)
+                    ->get();
+            } elseif ($status === 'upcoming') {
+                $conferences = Conference::with(['images', 'committeeMembers', 'scientificTopics', 'prices'])
+                    ->where('start_date', '>', $currentDate)
+                    ->get();
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid status parameter. Use "past" or "upcoming".'
+                ], 400);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $conferences
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve conferences by status.',
+            ], 500);
+        }
+    }
+
+    public function getConferenceById($id)
+    {
+        $conference = Conference::find($id);
+
+        if (!$conference) {
+            return response()->json(['message' => 'Conference not found'], 404);
+        }
+
+        return response()->json($conference, 200);
+    }
 }
-
-

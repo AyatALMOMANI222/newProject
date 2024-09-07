@@ -12,7 +12,7 @@ class ConferenceImage extends Model
 
     protected $fillable = [
         'conference_id',
-        'image',
+        'conference_img',
     ];
 
     public function conference()

@@ -12,7 +12,7 @@ class CommitteeMember extends Model
 
     protected $fillable = [
         'name',
-        'photo',
+        'committee_image',
         'conference_id',
     ];
 

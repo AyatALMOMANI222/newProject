@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('nationality'); 
             $table->string('password'); 
-            $table->string('file_path'); // مسار ملف الورقة العلمية
+            $table->string('file_path'); 
             $table->enum('status', ['under_review', 'accepted', 'rejected'])->default('under_review'); 
             $table->timestamps();
         });

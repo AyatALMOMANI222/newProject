@@ -28,7 +28,6 @@ class Conference extends Model
         'end_date' => 'date',
         'status' => 'string',
     ];
-        // تعريف العلاقة One to Many مع ConferenceImage
         public function images()
         {
             return $this->hasMany(ConferenceImage::class, 'conference_id');
@@ -44,6 +43,10 @@ class Conference extends Model
         public function prices()
         {
             return $this->hasMany(ConferencePrice::class);
+        }
+        public function papers()
+        {
+            return $this->hasMany(Paper::class);
         }
     
 }

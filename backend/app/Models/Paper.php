@@ -9,7 +9,8 @@ class Paper extends Model
 {
     use HasFactory;
 
-    protected $table = 'papers';
+    protected $table = 'scientific_papers';
+
 
     protected $fillable = [
         'conference_id',
@@ -29,12 +30,9 @@ class Paper extends Model
         'status' => 'string',
     ];
 
-    /**
-     * Get the conference that owns the paper.
-     */
-    // مو اكيد 
-    // public function conference()
-    // {
-    //     return $this->belongsTo(Conference::class);
-    // }
+ 
+    public function conference()
+    {
+        return $this->belongsTo(Conference::class);
+    }
 }
