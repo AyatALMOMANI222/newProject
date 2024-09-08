@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -26,11 +27,17 @@ class AuthController extends Controller
     
         // إنشاء توكن للمستخدم
         $token = $user->createToken('laravel')->plainTextToken;
-        
-        // إرسال التوكن في الاستجابة
-        return response()->json(['token' => $token]);
+    
+        // التحقق من قيمة is_admin
+        $isAdmin = $user->isAdmin;
+    
+        // إرسال التوكن ومعلومات is_admin في الاستجابة
+        return response()->json([
+            'token' => $token,
+            'isAdmin' => $isAdmin,
+        ]);
     }
-
+    
     public function userProfile(Request $request)
     {
         // الحصول على المستخدم المصادق عليه من التوكن

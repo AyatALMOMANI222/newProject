@@ -9,6 +9,7 @@ use App\Http\Controllers\PricesController;
 use App\Http\Controllers\ScientificPaperController;
 use App\Http\Controllers\ScientificTopicController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,8 +25,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 // conference
-Route::post('/con', [ConferenceController::class, 'store']);
-Route::get('/con', [ConferenceController::class, 'getAllConferences']);
+// Route::post('/con', [ConferenceController::class, 'store']);
+// Route::get('/con', [ConferenceController::class, 'getAllConferences']);
 Route::get('/con/{status}', [ConferenceController::class, 'getConferenceByStatus']);
 
 Route::get('/con/id/{id}', [ConferenceController::class, 'getConferenceById']);
@@ -43,8 +44,18 @@ Route::delete('/con/{conference_id}/{price_id}/prices', [PricesController::class
 // Route::get('/con/{conference_id}/prices', [PricesController::class, 'getPricesByConferenceId']);
 
 
-Route::post('/con/scientific-papers/{conferenceId}', [ScientificPaperController::class, 'store'])->middleware('auth');
+// Route::post('/con/scientific-papers/{conferenceId}', [ScientificPaperController::class, 'store'])->middleware('auth');
 
+Route::post('/con/scientific-papers/{conferenceId}', [ScientificPaperController::class, 'store']);
 
 
 Route::post('/exhibitions', [ExhibitionController::class, 'store']);
+
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/con', [ConferenceController::class, 'store']);
+});
+// Route::post('/con', [ConferenceController::class, 'store'])->middleware(['sanctum', CheckAdmin::class]);
+
+
